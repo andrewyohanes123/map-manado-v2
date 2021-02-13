@@ -16,25 +16,7 @@ const Mapbox = ReactMapboxGL({
 })
 
 export const Map: FC = (): ReactElement => {
-    const { setMap, map } = useContext(MapInstance);
-
-    useEffect(() => {
-        if (typeof map !== 'undefined') {
-            map.addSource('bangunan', {
-                'type': 'vector', 'tiles': ['http://10.71.71.216:1234/map/snapshots/4/shapes/?z={z}&x={x}&y={y}&layerName=bangunan']
-            })
-            map.addLayer({
-                'id': 'layer_bangunan',
-                'type': 'fill',
-                'source-layer': 'bangunan',
-                source: 'bangunan',
-                'paint': {
-                    'fill-color': 'blue'
-                },
-                minzoom: 13
-            })
-        }
-    }, [map])
+    const { setMap } = useContext(MapInstance);
 
     return (
         <>
@@ -47,6 +29,7 @@ export const Map: FC = (): ReactElement => {
                 onStyleLoad={map => {
                     setMap!(map);
                 }}
+                zoom={[13]}
                 center={[124.86218331706851, 1.4847125213695158]}
             >
             </Mapbox>

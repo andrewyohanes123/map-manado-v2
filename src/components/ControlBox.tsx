@@ -15,7 +15,10 @@ export const ControlBox: FC = (): ReactElement => {
                         <Button type="primary" shape="circle" onClick={() => toggleOpen(state => !state)} icon={<MenuOutlined />} />
                     </Tooltip>
                     <Tooltip title="Basemap" placement="topRight">
-                        <Button shape="circle" onClick={() => toggleModal!()} icon={<BookOutlined />} />
+                        <Button shape="circle" onClick={() => {
+                            toggleModal!()
+                            toggleOpen(false);
+                        }} icon={<BookOutlined />} />
                     </Tooltip>
                 </Space>
             </div>
