@@ -2,6 +2,7 @@ import { FC, ReactElement, useState, useContext } from 'react'
 import { Button, Drawer, Tooltip, Space } from 'antd'
 import { MenuOutlined, BookOutlined } from '@ant-design/icons'
 import { ModalContext } from '../contexts/ModalSnapshotContext'
+import { Regions } from './Regions'
 
 export const ControlBox: FC = (): ReactElement => {
     const [open, toggleOpen] = useState<boolean>(false);
@@ -22,8 +23,8 @@ export const ControlBox: FC = (): ReactElement => {
                     </Tooltip>
                 </Space>
             </div>
-            <Drawer width={400} title="Test" visible={open} mask={false} onClose={() => toggleOpen(false)}>
-
+            <Drawer bodyStyle={{ padding: `10px 10px` }} width={400} title="Wilayah" visible={open} mask={false} onClose={() => toggleOpen(false)}>
+                <Regions />
             </Drawer>
         </>
     )

@@ -1,11 +1,9 @@
 import { FC, ReactElement, useEffect, useCallback, useState, useContext } from 'react'
-import { List, Drawer, Card, Button, Slider } from 'antd'
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'
-import { SketchPicker } from 'react-color'
+import { List, Drawer } from 'antd'
 import { AxiosResponse, Connection } from '../modules/Connection'
 import { ModalContext } from '../contexts/ModalSnapshotContext';
 import { MapInstance } from '../contexts/MapInstanceContext';
-import { stringify } from 'querystring'
+import { SnapshotCard } from './Snapshot'
 
 export interface SnapshotsProps {
     visible: boolean;
@@ -17,6 +15,7 @@ export interface Snapshot {
     id: number;
     visible: boolean;
     opacity: number;
+    color: string;
 }
 
 export const Snapshots: FC = (): ReactElement => {
@@ -36,7 +35,6 @@ export const Snapshots: FC = (): ReactElement => {
         if (typeof map !== 'undefined' && snapshots.length > 0) {
             snapshots.forEach((snapshot) => {
                 if (typeof map.getLayer(`layer_${snapshot.name}`) === 'undefined') {
-                    console.log(snapshot)
                     map.addSource(snapshot.name, {
                         'type': 'vector', 'tiles': [`http://10.71.71.216:1234/map/snapshots/${snapshot.id}/shapes/?z={z}&x={x}&y={y}&layerName=${snapshot.name}`]
                     })
@@ -50,7 +48,7 @@ export const Snapshots: FC = (): ReactElement => {
                             'fill-color': snapshot.color,
                             'fill-opacity': snapshot.opacity
                         },
-                        minzoom: 13,
+                        minzoom: 12.5,
                         layout: {
                             visibility: 'none'
                         }
@@ -68,9 +66,12 @@ export const Snapshots: FC = (): ReactElement => {
                                 visibility: 'none'
                             }
                         })
-                } else {
-                    console.log(map.getLayer(`layer_${snapshot.name}`))
-                }
+                } 
+                // else {
+                //     map?.setLayoutProperty(`layer_${snapshot.name}`, 'visibility', visible ? 'none' : 'visible');
+                //     typeof map !== 'undefined' && map.setPaintProperty(`layer_${snapshot.name}`, snapshot.type === 'LineString' ? 'line-color' : 'fill-color', snapshot.color);
+                //     typeof map !== 'undefined' && map.setPaintProperty(`layer_${snapshot.name}`, snapshot.type === 'LineString' ? 'line-opacity' : 'fill-opacity', snapshot.opacity);
+                // }
             })
         }
     }, [map, snapshots]);
@@ -102,7 +103,7 @@ export const Snapshots: FC = (): ReactElement => {
         typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-opacity' : 'fill-opacity', val);
         setSnapshots(snapshots => [...snapshots.map(snapshot => ({ ...snapshot, opacity: snapshot.name === name ? val : snapshot.opacity }))]);
     }, [map]);
-    
+
     const changeColor = useCallback((val: string, name: string, type: string) => {
         typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-color' : 'fill-color', val);
         setSnapshots(snapshots => [...snapshots.map(snapshot => ({ ...snapshot, color: snapshot.name === name ? val : snapshot.color }))]);
@@ -116,12 +117,7 @@ export const Snapshots: FC = (): ReactElement => {
                 <List dataSource={snapshots}
                     renderItem={(item) => (
                         <>
-                            <Card size="small" title={item.name} style={{ marginBottom: 10 }} extra={[
-                                <Button size="small" key={'toggle'} onClick={() => toggleLayer(item.name)} icon={item.visible ? <EyeInvisibleOutlined /> : <EyeOutlined />} />
-                            ]}>
-                                <Slider onChange={(val: number) => setOpacity(val, item.name, item.type)} value={item.opacity} disabled={!item.visible} defaultValue={item.opacity} min={0} max={1} step={0.1} tipFormatter={(val) => (val as number) * 10} />
-                                {item.visible && <SketchPicker color={item.color} onChange={val => changeColor(val.hex, item.name, item.type)} />}
-                            </Card>
+                            <SnapshotCard snapshot={item} onChangeColor={changeColor} onChangeOpacity={setOpacity} toggleLayer={toggleLayer} />
                         </>
                     )}
                     rowKey={item => `${item.id}`}

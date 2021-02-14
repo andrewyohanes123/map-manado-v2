@@ -4,7 +4,7 @@ import { Snapshots } from './components/Snapshots';
 import { ModalSnapshotProvider } from './contexts/ModalSnapshotContext';
 import { MapInstanceProvider } from './contexts/MapInstanceContext';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.dark.css'
 import './App.css'
 
 function App() {

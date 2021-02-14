@@ -1,5 +1,5 @@
-import { FC, ReactElement, useContext, useEffect } from 'react'
-import ReactMapboxGL from 'react-mapbox-gl'
+import { FC, ReactElement, useContext } from 'react'
+import ReactMapboxGL, {ZoomControl, ScaleControl} from 'react-mapbox-gl'
 import { MapInstance } from '../contexts/MapInstanceContext'
 
 const Mapbox = ReactMapboxGL({
@@ -32,6 +32,8 @@ export const Map: FC = (): ReactElement => {
                 zoom={[13]}
                 center={[124.86218331706851, 1.4847125213695158]}
             >
+                <ZoomControl position="bottom-right" />
+                <ScaleControl position="bottom-left" />
             </Mapbox>
         </>
     )
