@@ -12,7 +12,8 @@ const Mapbox = ReactMapboxGL({
             // headers: { 'x-map-key': '8d3a4f73-6c1b-4932-be1d-8edbaf09a486' },
             // credentials: 'include'
         }
-    }
+    },
+    minZoom: 12.5
 })
 
 export const Map: FC = (): ReactElement => {
@@ -32,8 +33,8 @@ export const Map: FC = (): ReactElement => {
                 zoom={[13]}
                 center={[124.86218331706851, 1.4847125213695158]}
             >
-                <ZoomControl position="bottom-right" />
-                <ScaleControl position="bottom-left" />
+                <ZoomControl className="zoom-control" position="bottom-right" />
+                <ScaleControl style={{ background: '#999' }} position="bottom-left" />
             </Mapbox>
         </>
     )

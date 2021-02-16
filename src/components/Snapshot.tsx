@@ -15,7 +15,7 @@ export const SnapshotCard: FC<SnapshotCardProps> = ({ snapshot: item, toggleLaye
     const [colorPicker, toggleColorPicker] = useState<boolean>(false);
     return (
         <Card size="small" title={item.name} style={{ marginBottom: 10, position: 'relative' }} extra={[
-            <Switch checkedChildren={<EyeOutlined />} onChange={() => toggleLayer(item.name)} checked={item.visible} unCheckedChildren={<EyeInvisibleOutlined />} />
+            <Switch key="switch" checkedChildren={<EyeOutlined />} onChange={() => toggleLayer(item.name)} checked={item.visible} unCheckedChildren={<EyeInvisibleOutlined />} />
         ]}>
             {
                 !item.visible ?

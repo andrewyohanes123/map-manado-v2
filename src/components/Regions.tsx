@@ -13,7 +13,7 @@ export interface District {
 export interface Subdistrict {
     id: number;
     name: string;
-    neighbor: Neighbor[];
+    neighbors: Neighbor[];
     district_id: number;
 }
 

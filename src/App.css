@@ -5,3 +5,7 @@
     z-index: 100;
     padding: 10px;    
 }
+
+.zoom-control {
+    background: #999;
+}
