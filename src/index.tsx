@@ -4,13 +4,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import mapboxgl from 'mapbox-gl';
 import './index.css';
+import { RegionSelectorProvider } from './contexts/RegionSelectorContext';
 
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 ReactDOM.render(
-  <App />,
+  <RegionSelectorProvider>
+    <App />
+  </RegionSelectorProvider>,
   document.getElementById('root')
 );
 

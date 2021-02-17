@@ -14,13 +14,14 @@ export interface Subdistrict {
     id: number;
     name: string;
     neighbors: Neighbor[];
-    district_id: number;
+    district_id: number;    
 }
 
 export interface Neighbor {
     id: number;
     name: string;
     subdistrict_id: number;
+    district_id: number;
 }
 
 export const Regions: FC = (): ReactElement => {

@@ -30,7 +30,6 @@ export const ModalSnapshotProvider: FC = ({ children }): ReactElement => {
 const attachmentReducer = (state: ModalSnapshotProviderArgs, { type, payload }: AttachmentReducerActionArgs): ModalSnapshotProviderArgs => {
     switch (type) {
         case "OPEN_MODAL":
-            console.log({ state })
             return { ...state, open: payload };
         case "CLOSE_MODAL":
             // @ts-ignore

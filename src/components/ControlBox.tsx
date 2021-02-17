@@ -1,29 +1,33 @@
 import { FC, ReactElement, useState, useContext } from 'react'
-import { Button, Drawer, Tooltip, Space } from 'antd'
+import { Button, Drawer, Tooltip, Space, Typography } from 'antd'
 import { MenuOutlined, BookOutlined } from '@ant-design/icons'
 import { ModalContext } from '../contexts/ModalSnapshotContext'
 import { Regions } from './Regions'
 
 export const ControlBox: FC = (): ReactElement => {
     const [open, toggleOpen] = useState<boolean>(false);
-    const { toggleModal } = useContext(ModalContext)
+    const { toggleModal, open: modal } = useContext(ModalContext)
 
     return (
         <>
-            <div className="control-box">
+            <div className={`control-box ${(open || modal) ? 'drawer-open' : ''}`}>
+                <Typography.Text style={{ marginBottom: 0, marginRight: 15 }}>Manado Map V2</Typography.Text>
                 <Space>
-                    <Tooltip title="Menu" placement="topRight">
-                        <Button type="primary" shape="circle" onClick={() => toggleOpen(state => !state)} icon={<MenuOutlined />} />
+                    <Tooltip title="Daftar Wilayah" placement="topRight">
+                        <Button type="primary" shape="circle" onClick={() => {
+                            modal && toggleModal!();
+                            toggleOpen(state => !state);
+                        }} icon={<MenuOutlined />} />
                     </Tooltip>
                     <Tooltip title="Basemap" placement="topRight">
                         <Button shape="circle" onClick={() => {
-                            toggleModal!()
+                            toggleModal!();
                             toggleOpen(false);
                         }} icon={<BookOutlined />} />
                     </Tooltip>
                 </Space>
             </div>
-            <Drawer bodyStyle={{ padding: `10px 10px` }} width={400} title="Wilayah" visible={open} mask={false} onClose={() => toggleOpen(false)}>
+            <Drawer bodyStyle={{ padding: `10px 10px` }} width={350} title="Wilayah" visible={open} mask={false} onClose={() => toggleOpen(false)}>
                 <Regions />
             </Drawer>
         </>

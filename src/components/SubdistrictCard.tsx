@@ -6,18 +6,21 @@ import { NeighborCard } from './NeighborCard'
 
 export interface SubdistrictCardProps {
     subdistrict: Subdistrict;
+    district_id: number;
 }
 
-export const SubdistrictCard: FC<SubdistrictCardProps> = ({ subdistrict }): ReactElement => {
+export const SubdistrictCard: FC<SubdistrictCardProps> = ({ subdistrict, district_id }): ReactElement => {
     const [collapse, toggleCollapse] = useState<boolean>(false);
 
     const toggleNeighbor = useCallback(() => {
         toggleCollapse(collapsed => !collapsed);
-    }, [])
+    }, []);
 
     return (
         <>
-            <Card size="small" style={{ marginBottom: 5 }} bordered={false} hoverable>
+            <Card size="small" style={{ marginBottom: 5 }} onDoubleClick={() => {
+                console.log({ subdistrict, district_id });
+            }} bordered={false} hoverable>
                 <Row justify="space-between">
                     <Col md={18}>
                         {subdistrict.name}

@@ -13,9 +13,9 @@ export const NeighborCard: FC<NeighborCardProps> = ({ neighbors }): ReactElement
         dataSource={neighbors}
         rowKey={neighbor => `${neighbor.id}`}
         renderItem={neighbor => (
-          <Card size="small" bordered={false} hoverable><Typography.Text>{neighbor.name}</Typography.Text></Card>
+          <Card size="small" style={{ marginBottom: 7.5 }} onDoubleClick={() => console.log({ neighbor })} bordered={false} hoverable><Typography.Text>{neighbor.name}</Typography.Text></Card>
         )}
-        locale={{emptyText: <Typography.Text type="secondary">Tidak ada lingkungan</Typography.Text> }}
+        locale={{ emptyText: <Typography.Text type="secondary">Tidak ada lingkungan</Typography.Text> }}
       />
     </div>
   )

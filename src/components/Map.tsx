@@ -34,7 +34,7 @@ export const Map: FC = (): ReactElement => {
                 center={[124.86218331706851, 1.4847125213695158]}
             >
                 <ZoomControl className="zoom-control" position="bottom-right" />
-                <ScaleControl style={{ background: '#999' }} position="bottom-left" />
+                <ScaleControl position="bottom-left" />
             </Mapbox>
         </>
     )
