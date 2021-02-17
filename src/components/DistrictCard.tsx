@@ -4,6 +4,7 @@ import { District } from './Regions'
 import { CaretDownOutlined, CaretRightOutlined } from '@ant-design/icons'
 import { SubdistrictCard } from './SubdistrictCard'
 import { RegionSelector } from '../contexts/RegionSelectorContext'
+import { FocusedRegion } from '../App'
 
 export interface DistrictCardProps {
     district: District;
@@ -12,10 +13,11 @@ export interface DistrictCardProps {
 export const DistrictCard: FC<DistrictCardProps> = ({ district }): ReactElement => {
     const [show, toggleShow] = useState<boolean>(false);
     const { setRegion } = useContext(RegionSelector);
+    const { setRegion: setFocusedRegion } = useContext(FocusedRegion);
 
     const focusOnRegion = useCallback((ev: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
-        console.log(ev.target)
-    }, [])
+        typeof setFocusedRegion !== 'undefined' && setFocusedRegion({ district_id: district.id});
+    }, [setFocusedRegion, district]);
 
     const collapseSubdistrict = useCallback((ev: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
         ev.stopPropagation();
