@@ -1,7 +1,7 @@
 import { ReactElement, FC, useState, useEffect, useCallback, useContext, useMemo } from 'react'
 import { List, Input, Divider } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import { bbox } from '@turf/turf'
+import { bbox, difference, polygon } from '@turf/turf'
 import { Connection } from '../modules/Connection'
 import { DistrictCard } from './DistrictCard'
 import { FocusedRegion } from '../App'
@@ -54,7 +54,44 @@ export const Regions: FC = (): ReactElement => {
             const boundingBox = bbox(data.geometry);
             // @ts-ignore
             map.fitBounds(boundingBox, { padding: 30 });
-            // console.log({ boundingBox })
+            const earthSource = map.getSource(`earth`);
+            const earthLayer = map.getLayer(`earth`);
+
+            if (typeof earthSource !== 'undefined' && typeof earthLayer !== 'undefined') {
+                map.removeLayer(`earth`);
+                map.removeSource(`earth`);
+            }
+
+            const diff = difference({
+                type: 'Polygon',
+                coordinates: [
+                    [
+                        // [
+                        [-85.1054596961173, -180].reverse(),
+                        [85.1054596961173, -180].reverse(),
+                        [85.1054596961173, 180].reverse(),
+                        [-85.1054596961173, 180].reverse(),
+                        [-85.1054596961173, 0].reverse(),
+                        // ]
+                    ]
+                ]
+                // @ts-ignore
+            }, data.geometry);
+            map.addSource(`earth`, {
+                type: 'geojson',
+                // @ts-ignore
+                data: diff
+            });
+            map.addLayer({
+                id: `earth`,
+                type: 'fill',
+                source: `earth`,
+                layout: {},
+                paint: {
+                    'fill-color': '#000',
+                    'fill-opacity': 0.6
+                }
+            });
         }
     }, [data, map]);
 
@@ -64,7 +101,7 @@ export const Regions: FC = (): ReactElement => {
 
     const filteredRegions = useMemo(() => (
         regions.filter(district => (district.name.toLowerCase().match(filter.toLowerCase())))
-    ), [regions, filter]) 
+    ), [regions, filter])
 
     return (
         <>

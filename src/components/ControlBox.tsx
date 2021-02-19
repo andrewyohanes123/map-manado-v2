@@ -1,14 +1,22 @@
-import { FC, ReactElement, useState, useContext } from 'react'
+import { FC, ReactElement, useState, useContext, useCallback } from 'react'
 import { Button, Drawer, Tooltip, Space, Typography } from 'antd'
 import { MenuOutlined, BookOutlined, ArrowLeftOutlined } from '@ant-design/icons'
 import { ModalContext } from '../contexts/ModalSnapshotContext'
 import { Regions } from './Regions'
 import { FocusedRegion } from '../App'
+import { MapInstance } from '../contexts/MapInstanceContext'
 
 export const ControlBox: FC = (): ReactElement => {
     const [open, toggleOpen] = useState<boolean>(false);
     const { toggleModal, open: modal } = useContext(ModalContext);
     const {unsetRegion, data} = useContext(FocusedRegion);
+    const {map} = useContext(MapInstance)
+
+    const removeRegion = useCallback(() => {
+        map?.removeLayer(`earth`);
+        map?.removeSource(`earth`);
+        unsetRegion!();
+    }, [unsetRegion, map, data])
 
     return (
         <>
@@ -32,7 +40,7 @@ export const ControlBox: FC = (): ReactElement => {
             <Drawer bodyStyle={{ padding: `10px 10px` }} width={350} title="Wilayah" visible={open} mask={false} onClose={() => toggleOpen(false)}>
                 {(typeof data !== 'undefined' && typeof unsetRegion !== 'undefined') && 
                 <Tooltip title="Fokus ke wilayah Manado">
-                    <Button block style={{ marginBottom: 5 }} type="primary" icon={<ArrowLeftOutlined />} onClick={unsetRegion} />
+                    <Button block style={{ marginBottom: 5 }} type="primary" icon={<ArrowLeftOutlined />} onClick={removeRegion} />
                 </Tooltip>
                 }
                 <Regions />
