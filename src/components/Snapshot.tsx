@@ -11,7 +11,9 @@ export interface SnapshotCardProps {
     toggleLayer: (name: string) => void;
 }
 
+
 export const SnapshotCard: FC<SnapshotCardProps> = ({ snapshot: item, toggleLayer, onChangeColor, onChangeOpacity }): ReactElement => {
+
     const [colorPicker, toggleColorPicker] = useState<boolean>(false);
     return (
         <Card size="small" title={item.name} style={{ marginBottom: 10, position: 'relative' }} extra={[
@@ -27,15 +29,15 @@ export const SnapshotCard: FC<SnapshotCardProps> = ({ snapshot: item, toggleLaye
                     <>
                         <Slider onChange={(val: number) => onChangeOpacity(val, item.name, item.type)} value={item.opacity} disabled={!item.visible} defaultValue={item.opacity} min={0} max={1} step={0.1} tipFormatter={(val) => (val as number) * 10} />
                         {colorPicker &&
-                            <Card size="small" title={`Warna ${item.name}`} extra={[<Button type="primary" onClick={() => toggleColorPicker(false)} key={item.name} size="small" icon={<CheckCircleOutlined />} />]} style={{ position: 'absolute', zIndex: 100 }}>
+                            <Card size="small" title={`Warna ${item.name}`} extra={[<Button type="primary" onClick={() => toggleColorPicker(false)} key={item.name} size="small" icon={<CheckCircleOutlined />} />]} 
+                            style={{ position: 'absolute', zIndex: 100 }}                            
+                            >
                                 <SketchPicker disableAlpha={true} color={item.color} onChange={val => onChangeColor(val.hex, item.name, item.type)} />
                             </Card>
                         }
-                        {!colorPicker &&
-                            <Tooltip title={`Ganti warna ${item.name}`}>
-                                <div style={{ padding: 30, borderRadius: 12, background: item.color, cursor: 'pointer' }} onClick={() => toggleColorPicker(true)} />
-                            </Tooltip>
-                        }
+                        <Tooltip title={`Ganti warna ${item.name}`}>
+                            <div style={{ padding: 30, borderRadius: 12, background: item.color, cursor: 'pointer' }} onClick={() => toggleColorPicker(true)} />
+                        </Tooltip>
                     </>
             }
         </Card>

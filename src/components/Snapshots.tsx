@@ -73,7 +73,7 @@ export const Snapshots: FC = (): ReactElement => {
                 //     typeof map !== 'undefined' && map.setPaintProperty(`layer_${snapshot.name}`, snapshot.type === 'LineString' ? 'line-opacity' : 'fill-opacity', snapshot.opacity);
                 // }
             })
-            map.on('click', 'layer_bangunan', (e) => {
+            map.on('click', 'layer_Bangunan', (e) => {
                 console.log(e.features)
             })
         }
