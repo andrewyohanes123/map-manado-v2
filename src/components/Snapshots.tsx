@@ -18,6 +18,12 @@ export interface Snapshot {
     color: string;
 }
 
+const { REACT_APP_IP_ADDRESS, REACT_APP_PORT }: NodeJS.ProcessEnv = process.env;
+
+// export interface MapboxEventWithFields extends mapboxgl.MapMouseEvent & {
+//     features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+// } & mapboxgl.EventData 
+
 export const Snapshots: FC = (): ReactElement => {
     const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
     const { open: visible, toggleModal } = useContext(ModalContext);
@@ -36,17 +42,26 @@ export const Snapshots: FC = (): ReactElement => {
             snapshots.forEach((snapshot) => {
                 if (typeof map.getLayer(`layer_${snapshot.name}`) === 'undefined') {
                     map.addSource(snapshot.name, {
-                        'type': 'vector', 'tiles': [`http://10.71.71.216:1234/map/snapshots/${snapshot.id}/shapes/?z={z}&x={x}&y={y}&layerName=${snapshot.name}`]
+                        'type': 'vector', 'tiles': [`${REACT_APP_IP_ADDRESS}:${REACT_APP_PORT}/map/snapshots/${snapshot.id}/shapes/?z={z}&x={x}&y={y}&layerName=${snapshot.name}`]
                     })
                     const layerType = typeConverter(snapshot.type);
-                    map.addLayer(layerType === 'fill' ? {
+                    map.addLayer(layerType === 'fill-extrusion' ? {
                         'id': `layer_${snapshot.name}`,
                         'type': layerType,
                         'source-layer': snapshot.name,
                         source: snapshot.name,
                         'paint': {
-                            'fill-color': snapshot.color,
-                            'fill-opacity': snapshot.opacity
+                            'fill-extrusion-color': snapshot.color,
+                            'fill-extrusion-opacity': snapshot.opacity,
+                            'fill-extrusion-height': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                15,
+                                0,
+                                15.05,
+                                ['get', 'height']
+                            ]
                         },
                         minzoom: 12.5,
                         layout: {
@@ -66,7 +81,7 @@ export const Snapshots: FC = (): ReactElement => {
                                 visibility: 'none'
                             }
                         })
-                } 
+                }
                 // else {
                 //     map?.setLayoutProperty(`layer_${snapshot.name}`, 'visibility', visible ? 'none' : 'visible');
                 //     typeof map !== 'undefined' && map.setPaintProperty(`layer_${snapshot.name}`, snapshot.type === 'LineString' ? 'line-color' : 'fill-color', snapshot.color);
@@ -74,19 +89,19 @@ export const Snapshots: FC = (): ReactElement => {
                 // }
             })
             map.on('click', 'layer_Bangunan', (e) => {
-                console.log(e.features)
+                console.log(e.features![0].properties)
             })
         }
     }, [map, snapshots]);
 
-    const typeConverter = (type: 'Polygon' | 'LineString'): 'fill' | 'line' => {
+    const typeConverter = (type: 'Polygon' | 'LineString'): 'fill-extrusion' | 'line' => {
         switch (type) {
             case 'Polygon':
-                return 'fill';
+                return 'fill-extrusion';
             case 'LineString':
                 return 'line';
             default:
-                return 'fill'
+                return 'fill-extrusion'
         }
     }
 
@@ -103,12 +118,12 @@ export const Snapshots: FC = (): ReactElement => {
     }, [map]);
 
     const setOpacity = useCallback((val: number, name: string, type: string) => {
-        typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-opacity' : 'fill-opacity', val);
+        typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-opacity' : 'fill-extrusion-opacity', val);
         setSnapshots(snapshots => [...snapshots.map(snapshot => ({ ...snapshot, opacity: snapshot.name === name ? val : snapshot.opacity }))]);
     }, [map]);
 
     const changeColor = useCallback((val: string, name: string, type: string) => {
-        typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-color' : 'fill-color', val);
+        typeof map !== 'undefined' && map.setPaintProperty(`layer_${name}`, type === 'LineString' ? 'line-color' : 'fill-extrusion-color', val);
         setSnapshots(snapshots => [...snapshots.map(snapshot => ({ ...snapshot, color: snapshot.name === name ? val : snapshot.color }))]);
     }, [map]);
 

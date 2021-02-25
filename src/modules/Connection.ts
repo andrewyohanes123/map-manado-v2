@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { Snapshot } from '../components/Snapshots';
 
+const { REACT_APP_IP_ADDRESS, REACT_APP_PORT }: NodeJS.ProcessEnv = process.env;
+
 export interface AxiosResponse {
     data: {
         data: {
@@ -11,5 +13,5 @@ export interface AxiosResponse {
 }
 
 export const Connection = axios.create({
-    baseURL: 'http://10.71.71.216:1234/'
+    baseURL: `${REACT_APP_IP_ADDRESS}:${REACT_APP_PORT}`
 });

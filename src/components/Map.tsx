@@ -2,6 +2,8 @@ import { FC, ReactElement, useContext } from 'react'
 import ReactMapboxGL, {ZoomControl, ScaleControl} from 'react-mapbox-gl'
 import { MapInstance } from '../contexts/MapInstanceContext'
 
+const { REACT_APP_IP_ADDRESS, REACT_APP_PORT }: NodeJS.ProcessEnv = process.env;
+
 const Mapbox = ReactMapboxGL({
     accessToken: 'pk.eyJ1IjoiYW5kcmV3eW9oYW5lcyIsImEiOiJjamxsc2c3MnQweHRuM2tsMXowNXR5ZTQ5In0.H6o00Jv2W2pfGbiY7BK7Yw',
     attributionControl: false,
@@ -22,7 +24,7 @@ export const Map: FC = (): ReactElement => {
     return (
         <>
             <Mapbox
-                style="http://10.71.71.216:1234/map/maps/erdow"
+                style={`${REACT_APP_IP_ADDRESS}:${REACT_APP_PORT}/map/maps/erdow`}
                 containerStyle={{
                     height: '100vh',
                     width: '100vw'
