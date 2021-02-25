@@ -16,7 +16,7 @@ export const ControlBox: FC = (): ReactElement => {
         map?.removeLayer(`earth`);
         map?.removeSource(`earth`);
         unsetRegion!();
-    }, [unsetRegion, map, data])
+    }, [unsetRegion, map])
 
     return (
         <>

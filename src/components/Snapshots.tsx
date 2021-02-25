@@ -4,6 +4,7 @@ import { AxiosResponse, Connection } from '../modules/Connection'
 import { ModalContext } from '../contexts/ModalSnapshotContext';
 import { MapInstance } from '../contexts/MapInstanceContext';
 import { SnapshotCard } from './Snapshot'
+import { SnapshotContext } from '../contexts/SnapshotContext';
 
 export interface SnapshotsProps {
     visible: boolean;
@@ -28,6 +29,7 @@ export const Snapshots: FC = (): ReactElement => {
     const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
     const { open: visible, toggleModal } = useContext(ModalContext);
     const { map } = useContext(MapInstance);
+    const { setSnapshot, togglePanel } = useContext(SnapshotContext)
 
     const getSnapshots = useCallback(() => {
         Connection.get('/apis/snapshots').then((resp: AxiosResponse) => {
@@ -89,10 +91,12 @@ export const Snapshots: FC = (): ReactElement => {
                 // }
             })
             map.on('click', 'layer_Bangunan', (e) => {
-                console.log(e.features![0].properties)
-            })
+                // console.log(e.features![0].properties)
+                setSnapshot!(e.features![0]);
+                togglePanel!(true);
+            });
         }
-    }, [map, snapshots]);
+    }, [map, snapshots, setSnapshot, togglePanel]);
 
     const typeConverter = (type: 'Polygon' | 'LineString'): 'fill-extrusion' | 'line' => {
         switch (type) {

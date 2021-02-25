@@ -7,11 +7,13 @@ import './App.css'
 import { Connection } from './modules/Connection';
 import { MapInstance } from './contexts/MapInstanceContext';
 import { LoadingBox } from './components/LoadingBox';
+import { SnapshotProvider } from './contexts/SnapshotContext';
 
 const ControlBox = lazy(() => import('./components/ControlBox').then(module => ({ default: module.ControlBox })));
 const Snapshots = lazy(() => import('./components/Snapshots').then(module => ({ default: module.Snapshots })));
 const SelectedRegionModal = lazy(() => import('./components/SelectedRegionModal').then(module => ({ default: module.SelectedRegionModal })));
 const Map = lazy(() => import('./components/Map').then(module => ({ default: module.Map })));
+const SnapshotDetail = lazy(() => import('./components/SnapshotDetail').then(module => ({ default: module.SnapshotDetail })));
 
 export interface RegionGeometry {
   id: number;
@@ -67,16 +69,19 @@ function App() {
 
   return (
     <ModalSnapshotProvider>
-      <FocusedRegion.Provider value={{ ...focusedRegion, setRegion, unsetRegion }}>
-        <Suspense fallback={<></>}>
-          <ControlBox />
-          <Snapshots />
-          <SelectedRegionModal />
-        </Suspense>
-        <Suspense fallback={<LoadingBox />}>
-          <Map />
-        </Suspense>
-      </FocusedRegion.Provider>
+      <SnapshotProvider>
+        <FocusedRegion.Provider value={{ ...focusedRegion, setRegion, unsetRegion }}>
+          <Suspense fallback={<></>}>
+            <ControlBox />
+            <Snapshots />
+            <SelectedRegionModal />
+            <SnapshotDetail />
+          </Suspense>
+          <Suspense fallback={<LoadingBox />}>
+            <Map />
+          </Suspense>
+        </FocusedRegion.Provider>
+      </SnapshotProvider>
     </ModalSnapshotProvider>
   );
 }

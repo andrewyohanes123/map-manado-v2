@@ -24,7 +24,7 @@ export const Map: FC = (): ReactElement => {
     return (
         <>
             <Mapbox
-                style={`${REACT_APP_IP_ADDRESS}:${REACT_APP_PORT}/map/maps/erdow`}
+                style={`${REACT_APP_IP_ADDRESS}:${REACT_APP_PORT}/map/maps/helo`}
                 containerStyle={{
                     height: '100vh',
                     width: '100vw'

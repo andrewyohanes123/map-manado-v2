@@ -1,4 +1,4 @@
-import { createContext, useReducer, FC, ReactElement } from 'react'
+import { createContext, useReducer, FC, ReactElement, useCallback } from 'react'
 
 export interface SnapshotProviderArgs {
     snapshot?: mapboxgl.MapboxGeoJSONFeature,
@@ -12,15 +12,22 @@ export const SnapshotContext = createContext<SnapshotProviderArgs>({ panel: fals
 export const SnapshotProvider: FC = ({ children }): ReactElement => {
     const [state, dispatch] = useReducer(snapshotReducer, { panel: false });
 
-    const setSnapshot = (snapshot: mapboxgl.MapboxGeoJSONFeature): void => {
+    const setSnapshot = useCallback((snapshot: mapboxgl.MapboxGeoJSONFeature): void => {
         dispatch({
             type: 'SET_SNAPSHOT',
             payload: snapshot
         });
-    }
+    }, []);
+
+    const togglePanel = useCallback((state: boolean) => {
+        dispatch({
+            type: 'TOGGLE_PANEL',
+            payload: state
+        })
+    }, [])
 
     return (
-        <SnapshotContext.Provider value={{ ...state, setSnapshot }}>
+        <SnapshotContext.Provider value={{ ...state, setSnapshot, togglePanel }}>
             {children}
         </SnapshotContext.Provider>
     )

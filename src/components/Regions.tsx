@@ -1,7 +1,7 @@
 import { ReactElement, FC, useState, useEffect, useCallback, useContext, useMemo } from 'react'
 import { List, Input, Divider } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import { bbox, difference, polygon } from '@turf/turf'
+import { bbox, difference } from '@turf/turf'
 import { Connection } from '../modules/Connection'
 import { DistrictCard } from './DistrictCard'
 import { FocusedRegion } from '../App'
